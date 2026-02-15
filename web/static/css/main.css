@@ -1,0 +1,166 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background: #f4f5f7;
+  color: #111827;
+}
+
+.header {
+  padding: 1rem;
+  background: #111827;
+  color: #f9fafb;
+  text-align: center;
+}
+
+.header__title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.main {
+  padding: 1rem;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.section {
+  margin-bottom: 1.5rem;
+}
+
+.section__title {
+  margin: 0 0 0.75rem;
+  font-size: 1.1rem;
+}
+
+.section--secondary {
+  margin-top: 2rem;
+}
+
+.profiles-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+.profile-card {
+  background: #ffffff;
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.1);
+}
+
+.profile-card__title {
+  margin: 0 0 0.25rem;
+  font-size: 1rem;
+}
+
+.profile-card__meta {
+  margin: 0 0 0.5rem;
+  font-size: 0.85rem;
+  color: #6b7280;
+}
+
+.profile-card__status {
+  margin: 0.5rem 0 0;
+  font-size: 0.85rem;
+  color: #4b5563;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.6rem 1rem;
+  border-radius: 999px;
+  border: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn--primary {
+  background: #2563eb;
+  color: #f9fafb;
+}
+
+.btn--secondary {
+  background: #e5e7eb;
+  color: #111827;
+}
+
+.btn--danger {
+  background: #dc2626;
+  color: #f9fafb;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn--small {
+  padding: 0.35rem 0.75rem;
+  font-size: 0.8rem;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+.list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.list__main {
+  font-size: 0.9rem;
+}
+
+.list__actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.inline-form {
+  display: inline;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.form__field span {
+  display: block;
+  margin-bottom: 0.15rem;
+  font-size: 0.85rem;
+}
+
+.form__field input {
+  width: 100%;
+  padding: 0.5rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid #d1d5db;
+  font-size: 0.95rem;
+}
+
+.muted {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+@media (min-width: 640px) {
+  .profiles-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

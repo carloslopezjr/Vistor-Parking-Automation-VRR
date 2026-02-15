@@ -1,0 +1,51 @@
+{{template "layout" .}}
+
+{{define "title"}}{{if .Profile}}Edit Profile{{else}}New Profile{{end}}{{end}}
+
+{{define "content"}}
+<section class="section">
+    <h2 class="section__title">{{if .Profile}}Edit Profile{{else}}New Profile{{end}}</h2>
+    <form method="post" action="{{.Action}}" class="form">
+        <label class="form__field">
+            <span>Profile Name</span>
+            <input name="profile_name" value="{{with .Profile}}{{.ProfileName}}{{end}}" required>
+        </label>
+        <label class="form__field">
+            <span>Apartment Name</span>
+            <input name="apartment_name" value="{{with .Profile}}{{.ApartmentName}}{{end}}" required>
+        </label>
+        <label class="form__field">
+            <span>Resident Name</span>
+            <input name="resident_name" value="{{with .Profile}}{{.ResidentName}}{{end}}" required>
+        </label>
+        <label class="form__field">
+            <span>Unit Number</span>
+            <input name="unit_number" value="{{with .Profile}}{{.UnitNumber}}{{end}}" required>
+        </label>
+        <label class="form__field">
+            <span>Visitor Name</span>
+            <input name="visitor_name" value="{{with .Profile}}{{.VisitorName}}{{end}}" required>
+        </label>
+        <label class="form__field">
+            <span>License Plate</span>
+            <input name="license_plate" value="{{with .Profile}}{{.LicensePlate}}{{end}}" required>
+        </label>
+        <label class="form__field">
+            <span>Vehicle Make</span>
+            <input name="vehicle_make" value="{{with .Profile}}{{.VehicleMake}}{{end}}" required>
+        </label>
+        <label class="form__field">
+            <span>Vehicle Model</span>
+            <input name="vehicle_model" value="{{with .Profile}}{{.VehicleModel}}{{end}}" required>
+        </label>
+        <label class="form__field">
+            <span>Resident Email</span>
+            <input type="email" name="resident_email" value="{{with .Profile}}{{.ResidentEmail}}{{end}}" required>
+        </label>
+        <button class="btn btn--primary btn--full" type="submit">Save</button>
+    </form>
+</section>
+<section class="section section--secondary">
+    <a class="btn btn--secondary btn--full" href="/profiles">Cancel</a>
+</section>
+{{end}}
