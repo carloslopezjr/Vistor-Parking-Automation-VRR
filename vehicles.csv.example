@@ -1,0 +1,4 @@
+apartment_name,license_plate,confirm_license_plate,vehicle_make,vehicle_model,resident_name,unit_number,visitor_name,confirmation_email
+Sunrise Towers,ABC1234,ABC1234,Toyota,Camry,John Smith,101,Jane Doe,john.smith@example.com
+Sunset Ridge,XYZ9876,XYZ9876,Honda,Civic,Sarah Johnson,205,Mike Brown,sarah.johnson@example.com
+Lakeside Park,DEF5678,DEF5678,Tesla,Model 3,David Lee,310,Emily White,david.lee@example.com

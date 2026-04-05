@@ -7,16 +7,20 @@ import "time"
 // be captured here so that changes to the site only require updating this
 // configuration.
 type SiteSelectors struct {
-	ApartmentName   string
-	LicensePlate    string
-	VehicleMake     string
-	VehicleModel    string
-	ResidentName    string
-	UnitNumber      string
-	VisitorName     string
-	ResidentEmail   string
-	SubmitButton    string
-	SuccessSelector string // element that indicates successful registration
+	ApartmentName              string
+	ApartmentConfirmButton     string // button to click after entering apartment name
+	LicensePlate               string
+	ConfirmedLicensePlate      string // confirmation field for license plate
+	VehicleMake                string
+	VehicleModel               string
+	ResidentName               string
+	UnitNumberButton           string // button to click to open unit number dialog
+	UnitNumberInput            string // input field inside unit number dialog
+	UnitNumberConfirmButton    string // confirm button for unit number dialog
+	VisitorName                string
+	ResidentEmail              string
+	SubmitButton               string
+	SuccessSelector            string // element that indicates successful registration
 }
 
 // WaitStrategy configures how the automation waits for the site to respond

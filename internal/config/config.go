@@ -70,16 +70,20 @@ func Load() (*Config, error) {
 
 	// Parse selectors from environment
 	c.PlaywrightSelectors = automation.SiteSelectors{
-		ApartmentName:   os.Getenv("PLAYWRIGHT_SELECTOR_APARTMENT_NAME"),
-		LicensePlate:    os.Getenv("PLAYWRIGHT_SELECTOR_LICENSE_PLATE"),
-		VehicleMake:     os.Getenv("PLAYWRIGHT_SELECTOR_VEHICLE_MAKE"),
-		VehicleModel:    os.Getenv("PLAYWRIGHT_SELECTOR_VEHICLE_MODEL"),
-		ResidentName:    os.Getenv("PLAYWRIGHT_SELECTOR_RESIDENT_NAME"),
-		UnitNumber:      os.Getenv("PLAYWRIGHT_SELECTOR_UNIT_NUMBER"),
-		VisitorName:     os.Getenv("PLAYWRIGHT_SELECTOR_VISITOR_NAME"),
-		ResidentEmail:   os.Getenv("PLAYWRIGHT_SELECTOR_RESIDENT_EMAIL"),
-		SubmitButton:    os.Getenv("PLAYWRIGHT_SELECTOR_SUBMIT_BUTTON"),
-		SuccessSelector: os.Getenv("PLAYWRIGHT_SELECTOR_SUCCESS"),
+		ApartmentName:          os.Getenv("PLAYWRIGHT_SELECTOR_APARTMENT_NAME"),
+		ApartmentConfirmButton: os.Getenv("PLAYWRIGHT_SELECTOR_APARTMENT_CONFIRM_BUTTON"),
+		LicensePlate:           os.Getenv("PLAYWRIGHT_SELECTOR_LICENSE_PLATE"),
+		ConfirmedLicensePlate:  os.Getenv("PLAYWRIGHT_SELECTOR_CONFIRMED_LICENSE_PLATE"),
+		VehicleMake:            os.Getenv("PLAYWRIGHT_SELECTOR_VEHICLE_MAKE"),
+		VehicleModel:           os.Getenv("PLAYWRIGHT_SELECTOR_VEHICLE_MODEL"),
+		ResidentName:           os.Getenv("PLAYWRIGHT_SELECTOR_RESIDENT_NAME"),
+		UnitNumberButton:       os.Getenv("PLAYWRIGHT_SELECTOR_UNIT_NUMBER_BUTTON"),
+		UnitNumberInput:        os.Getenv("PLAYWRIGHT_SELECTOR_UNIT_NUMBER_INPUT"),
+		UnitNumberConfirmButton: os.Getenv("PLAYWRIGHT_SELECTOR_UNIT_NUMBER_CONFIRM_BUTTON"),
+		VisitorName:            os.Getenv("PLAYWRIGHT_SELECTOR_VISITOR_NAME"),
+		ResidentEmail:          os.Getenv("PLAYWRIGHT_SELECTOR_RESIDENT_EMAIL"),
+		SubmitButton:           os.Getenv("PLAYWRIGHT_SELECTOR_SUBMIT_BUTTON"),
+		SuccessSelector:        os.Getenv("PLAYWRIGHT_SELECTOR_SUCCESS"),
 	}
 
 	c.BasicAuthUser = os.Getenv("BASIC_AUTH_USER")
