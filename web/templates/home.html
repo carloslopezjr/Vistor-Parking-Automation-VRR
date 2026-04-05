@@ -1,34 +1,261 @@
-{{template "layout" .}}
-
-{{define "title"}}Visitor Parking{{end}}
-
+{{template "layout" .}} {{define "title"}}Visitor Parking Automation{{end}}
 {{define "content"}}
 <section class="section">
-    <h2 class="section__title">Profiles</h2>
-    {{if .Profiles}}
-    <div class="profiles-grid">
-        {{range .Profiles}}
-        <article class="profile-card">
-            {{with .Profile}}
-            <h3 class="profile-card__title">{{.ProfileName}}</h3>
-            <p class="profile-card__meta">{{.ResidentName}} · {{.LicensePlate}}</p>
-            <form method="post" action="/profiles/{{.ID}}/register">
-                <button class="btn btn--primary btn--full" type="submit">Register Now</button>
-            </form>
-            {{end}}
-            {{with .LastLog}}
-            <p class="profile-card__status">
-                Last: {{if .Success}}✅ success{{else}}❌ failed{{end}} at {{.StartedAt}}
-            </p>
-            {{end}}
-        </article>
+  <h2 class="section__title">Vehicle Registration</h2>
+
+  {{if .Vehicles}}
+  <form id="registerForm" class="form">
+    <div class="form-group">
+      <label for="vehicleSelect" class="form-label">Select Vehicle:</label>
+      <select id="vehicleSelect" class="form-select" required>
+        <option value="">-- Choose a vehicle --</option>
+        {{range $index, $vehicle := .Vehicles}}
+        <option
+          value="{{$index}}"
+          data-apartment="{{$vehicle.ApartmentName}}"
+          data-make="{{$vehicle.VehicleMake}}"
+          data-model="{{$vehicle.VehicleModel}}"
+          data-resident="{{$vehicle.ResidentName}}"
+          data-visitor="{{$vehicle.VisitorName}}"
+          data-plate="{{$vehicle.LicensePlate}}"
+          data-unit="{{$vehicle.UnitNumber}}"
+          data-email="{{$vehicle.ConfirmationEmail}}"
+        >
+          {{$vehicle.VehicleModel}} ({{$vehicle.LicensePlate}}) -
+          {{$vehicle.VisitorName}}
+        </option>
         {{end}}
+      </select>
     </div>
-    {{else}}
-    <p>No profiles yet. <a href="/profiles/new">Create one</a>.</p>
-    {{end}}
+
+    <div id="vehicleDetails" class="vehicle-details" style="display: none">
+      <h3>Vehicle Details</h3>
+      <p><strong>Apartment:</strong> <span id="detailApartment"></span></p>
+      <p>
+        <strong>Vehicle:</strong> <span id="detailMake"></span>
+        <span id="detailModel"></span>
+      </p>
+      <p><strong>Resident:</strong> <span id="detailResident"></span></p>
+      <p><strong>Visitor:</strong> <span id="detailVisitor"></span></p>
+      <p><strong>License Plate:</strong> <span id="detailPlate"></span></p>
+      <p><strong>Unit:</strong> <span id="detailUnit"></span></p>
+      <p><strong>Email:</strong> <span id="detailEmail"></span></p>
+    </div>
+
+    <button
+      type="button"
+      id="submitBtn"
+      class="btn btn--primary btn--full"
+      style="display: none"
+    >
+      Auto-fill & Submit
+    </button>
+  </form>
+
+  <div id="spinner" class="spinner" style="display: none; margin-top: 20px">
+    <p>Processing registration...</p>
+  </div>
+
+  <div id="resultMessage" class="result-message" style="display: none">
+    <p id="resultText"></p>
+    <div id="resultLogs" class="result-logs"></div>
+  </div>
+  {{else}}
+  <p>No vehicles available. Please create a CSV file.</p>
+  {{end}}
 </section>
-<section class="section section--secondary">
-    <a class="btn btn--secondary btn--full" href="/profiles">Manage Profiles</a>
-</section>
+
+<style>
+  .form-group {
+    margin-bottom: 1rem;
+  }
+
+  .form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+  }
+
+  .form-select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+
+  .vehicle-details {
+    background-color: #f5f5f5;
+    padding: 1rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+  }
+
+  .vehicle-details p {
+    margin: 0.5rem 0;
+  }
+
+  .btn {
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn--primary {
+    background-color: #007bff;
+    color: white;
+  }
+
+  .btn--primary:hover {
+    background-color: #0056b3;
+  }
+
+  .btn--primary:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+
+  .btn--full {
+    width: 100%;
+  }
+
+  .spinner {
+    text-align: center;
+    color: #666;
+  }
+
+  .result-message {
+    padding: 1rem;
+    border-radius: 4px;
+    margin-top: 1rem;
+  }
+
+  .result-message.success {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+  }
+
+  .result-message.error {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+  }
+
+  .result-logs {
+    margin-top: 1rem;
+    padding: 1rem;
+    background-color: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 0.875rem;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+
+  .result-logs p {
+    margin: 0.25rem 0;
+  }
+</style>
+
+<script>
+  const form = document.getElementById("registerForm");
+  const vehicleSelect = document.getElementById("vehicleSelect");
+  const vehicleDetails = document.getElementById("vehicleDetails");
+  const submitBtn = document.getElementById("submitBtn");
+  const spinner = document.getElementById("spinner");
+  const resultMessage = document.getElementById("resultMessage");
+  const resultText = document.getElementById("resultText");
+  const resultLogs = document.getElementById("resultLogs");
+
+  vehicleSelect.addEventListener("change", function (e) {
+    const option = this.options[this.selectedIndex];
+    if (this.value === "") {
+      vehicleDetails.style.display = "none";
+      submitBtn.style.display = "none";
+      submitBtn.disabled = false;
+      resultMessage.style.display = "none";
+    } else {
+      document.getElementById("detailApartment").textContent =
+        option.dataset.apartment;
+      document.getElementById("detailMake").textContent = option.dataset.make;
+      document.getElementById("detailModel").textContent = option.dataset.model;
+      document.getElementById("detailResident").textContent =
+        option.dataset.resident;
+      document.getElementById("detailVisitor").textContent =
+        option.dataset.visitor;
+      document.getElementById("detailPlate").textContent = option.dataset.plate;
+      document.getElementById("detailUnit").textContent = option.dataset.unit;
+      document.getElementById("detailEmail").textContent = option.dataset.email;
+      vehicleDetails.style.display = "block";
+      submitBtn.style.display = "block";
+      resultMessage.style.display = "none";
+    }
+  });
+
+  submitBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    const vehicleId = parseInt(vehicleSelect.value);
+    if (isNaN(vehicleId)) {
+      alert("Please select a vehicle");
+      return;
+    }
+
+    submitBtn.disabled = true;
+    spinner.style.display = "block";
+    resultMessage.style.display = "none";
+
+    try {
+      const response = await fetch("/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ vehicleId: vehicleId }),
+      });
+
+      const data = await response.json();
+
+      spinner.style.display = "none";
+      resultMessage.style.display = "block";
+      resultMessage.className =
+        "result-message " + (data.success ? "success" : "error");
+
+      if (data.success) {
+        resultText.textContent = "✅ " + data.message;
+      } else {
+        resultText.textContent =
+          "❌ " + (data.error || data.message || "Registration failed");
+      }
+
+      // Display logs
+      if (data.logs && data.logs.length > 0) {
+        resultLogs.innerHTML =
+          "<p><strong>Logs:</strong></p>" +
+          data.logs.map((log) => "<p>" + escapeHtml(log) + "</p>").join("");
+      }
+
+      if (!data.success) {
+        submitBtn.disabled = false;
+      }
+    } catch (err) {
+      spinner.style.display = "none";
+      resultMessage.style.display = "block";
+      resultMessage.className = "result-message error";
+      resultText.textContent = "❌ Error: " + err.message;
+      submitBtn.disabled = false;
+    }
+  });
+
+  function escapeHtml(text) {
+    const div = document.createElement("div");
+    div.textContent = text;
+    return div.innerHTML;
+  }
+</script>
 {{end}}

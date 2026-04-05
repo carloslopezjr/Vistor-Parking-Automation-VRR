@@ -1,0 +1,4 @@
+apartment_name,license_plate,confirm_license_plate,vehicle_make,vehicle_model,resident_name,unit_number,visitor_name,confirmation_email
+Sunset Ridge Apartments,ABC123,ABC123,Toyota,Camry,John Smith,301,Jane Visitor,jane@example.com
+Sunset Ridge Apartments,XYZ789,XYZ789,Honda,Civic,Sarah Johnson,302,Bob Guest,bob@example.com
+Sunset Ridge Apartments,DEF456,DEF456,Ford,Focus,Mike Chen,303,Alice Visitor,alice@example.com

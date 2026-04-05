@@ -15,7 +15,8 @@ type Result struct {
 
 // Service defines the automation capabilities of the system.
 type Service interface {
-	RegisterVisitor(ctx context.Context, profileID int64, trigger models.RegistrationTrigger) (Result, error)
+	RegisterVisitor(ctx context.Context, vehicle models.Vehicle) (*Result, error)
+	Close() error
 }
 
 // noopService is a placeholder implementation used during early wiring.
@@ -28,6 +29,10 @@ func NewNoopService() Service {
 	return &noopService{}
 }
 
-func (n *noopService) RegisterVisitor(ctx context.Context, profileID int64, trigger models.RegistrationTrigger) (Result, error) {
-	return Result{Success: false, Error: "automation not implemented"}, nil
+func (n *noopService) RegisterVisitor(ctx context.Context, vehicle models.Vehicle) (*Result, error) {
+	return &Result{Success: false, Error: "automation not implemented"}, nil
+}
+
+func (n *noopService) Close() error {
+	return nil
 }

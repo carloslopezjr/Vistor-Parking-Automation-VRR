@@ -7,6 +7,7 @@ import "time"
 // be captured here so that changes to the site only require updating this
 // configuration.
 type SiteSelectors struct {
+	ApartmentName   string
 	LicensePlate    string
 	VehicleMake     string
 	VehicleModel    string
